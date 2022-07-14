@@ -1,0 +1,33 @@
+name: Generate GitHub Access Tokens
+description: Generates a GitHub access token using a custom API endpoint (with SigV4 authentication) and assigns the GitHub access token to an environment variable.
+
+inputs:
+  invoke-url:
+    description: URL of the custom API endpoint (with SigV4 authentication)
+    required: true
+  region:
+    description: AWS region of the custom API endpoint
+    required: true
+  configuration-name:
+    description: Name of the configuration passed to custom API endpoint as well as the name of the environment variable to which the access token will be assigned
+    required: true
+
+runs:
+  using: composite
+
+  steps:
+    - name: Install awscurl
+      shell: bash
+      run: |
+        pip install awscurl
+
+    - name: Generate GitHub access token and assign it to environment variable
+      shell: bash
+      run: |
+         awscurl \
+           --region ${{ inputs.region }} \
+           --service execute-api \
+           -X POST \
+           ${{ inputs.invoke-url }}/configurations/${{ inputs.configuration-name }}/github-access-tokens \
+           | jq -r '"echo \"${{ inputs.configuration-name }}=\(.token)\" >> $GITHUB_ENV"' \
+           | bash
