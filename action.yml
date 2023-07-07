@@ -26,7 +26,6 @@ runs:
       if: runner.os != 'macOS'
       run: | 
         pip install awscurl
-  
     - name: Generate GitHub access token and assign it to environment variable
       shell: bash
       run: |
