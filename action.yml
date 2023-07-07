@@ -16,11 +16,17 @@ runs:
   using: composite
 
   steps:
-    - name: Install awscurl
-      shell: bash
+    - name: Install dependencies for macOS
+      shell: bash 
+      if: runner.os == 'macOS'
       run: |
+        brew install awscurl jq
+    - name: Install dependencies
+      shell: bash
+      if: runner.os != 'macOS'
+      run: | 
         pip install awscurl
-
+  
     - name: Generate GitHub access token and assign it to environment variable
       shell: bash
       run: |
