@@ -8,12 +8,12 @@ Generates a GitHub access token using a custom API endpoint (with SigV4 authenti
     steps:
       - uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ vars.AWS_IAM_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
       - uses: babbel/generate-github-access-tokens@v1
         with:
-          invoke-url: ${{ secrets.ACCESS_TOKEN_GENERATOR_INVOKE_URL }}
-          region: ${{ secrets.ACCESS_TOKEN_GENERATOR_REGION }}
+          invoke-url: ${{ vars.ACCESS_TOKEN_GENERATOR_INVOKE_URL }}
+          region: ${{ vars.ACCESS_TOKEN_GENERATOR_REGION }}
           configuration-name: EXAMPLE_TOKEN
 ```
 
