@@ -6,7 +6,7 @@ Generates a GitHub access token using a custom API endpoint (with SigV4 authenti
 
 ```
     steps:
-      - uses: aws-actions/configure-aws-credentials@v1
+      - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ vars.AWS_IAM_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
