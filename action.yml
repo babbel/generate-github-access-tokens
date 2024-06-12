@@ -16,25 +16,15 @@ runs:
   using: composite
 
   steps:
-    - name: Install dependencies for macOS
-      shell: bash 
-      if: runner.os == 'macOS'
-      run: |
-        brew install awscurl jq
-
-    - name: Install dependencies
-      shell: bash
-      if: runner.os != 'macOS'
-      run: | 
-        pip install awscurl
-
     - name: Generate GitHub access token and assign it to environment variable
       shell: bash
       run: |
-         awscurl \
-           --region ${{ inputs.region }} \
-           --service execute-api \
-           -X POST \
-           ${{ inputs.invoke-url }}/configurations/${{ inputs.configuration-name }}/github-access-tokens \
-           | jq -r '"echo \"${{ inputs.configuration-name }}=\(.token)\" >> $GITHUB_ENV"' \
-           | bash
+        curl \
+          --fail \
+          --user "${{ env.AWS_ACCESS_KEY_ID }}":"${{ env.AWS_SECRET_ACCESS_KEY }}" \
+          --aws-sigv4 "aws:amz:${{ inputs.region }}:execute-api" \
+          -X POST \
+          -H "x-amz-security-token: ${{ env.AWS_SESSION_TOKEN }}" \
+          ${{ inputs.invoke-url }}/configurations/${{ inputs.configuration-name }}/github-access-tokens \
+          | jq -r '"echo \"${{ inputs.configuration-name }}=\(.token)\" >> $GITHUB_ENV"' \
+          | bash
