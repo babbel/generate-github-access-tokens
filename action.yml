@@ -16,12 +16,6 @@ runs:
   using: composite
 
   steps:
-    - name: Install dependencies for macOS
-      shell: bash
-      if: runner.os == 'macOS'
-      run: |
-        brew install jq
-
     - name: Generate GitHub access token and assign it to environment variable
       shell: bash
       run: |
